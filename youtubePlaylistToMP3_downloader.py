@@ -35,6 +35,7 @@ class YoutubePlaylistToMp3Downlaoder:
         return [x for x in full_list if x not in excludes]
 
     def download_mp3_from_url_list(self):
+        print('Videos to download: {}'.format(len(self.download_url_list)))
         print('Download Start...')
 
         ydl_opts = {
