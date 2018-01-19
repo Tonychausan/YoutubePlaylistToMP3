@@ -5,11 +5,11 @@ import youtube_dl
 
 
 class YoutubePlaylistToMp3Downlaoder:
-    def __init__(self, music_folder, playlist_url, playlist_info_json_filename, download_check_json_filename):
+    def __init__(self, music_folder, playlist_url):
         self.music_folder = music_folder
         self.playlist_url = playlist_url
-        self.playlist_info_json_filename = playlist_info_json_filename
-        self.download_check_json_filename = download_check_json_filename
+        self.playlist_info_json_filename = '{}/playlist_info.json'.format(music_folder)
+        self.download_check_json_filename = '{}/download_check.json'.format(music_folder)
 
         self.download_url_list = []
 
