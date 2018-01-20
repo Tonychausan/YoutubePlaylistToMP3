@@ -53,7 +53,6 @@ class YoutubePlaylistToMp3Downlaoder:
             link = 'https://www.youtube.com/watch?v={}'.format(url)
             youtube_video_links.append(link)
 
-        # for link in youtube_video_links:
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download(youtube_video_links)
 
