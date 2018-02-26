@@ -67,13 +67,7 @@ class YoutubePlaylistToMp3Downlaoder:
         print('Download finished...')
 
     def get_predownloaded_files_map(self):
-        file_list = []
-        for (dirpath, dirnames, filenames) in os.walk(self.music_folder):
-            file_list.extend(filenames)
-            break
-
-        # Filter filename that ends with <.mp3>
-        file_list = [file for file in file_list if file.endswith(".mp3")]
+        file_list = self.get_mp3_files_in_music_folder()
 
         predownloaded_files_map = {}
         for filename in file_list:
@@ -114,3 +108,14 @@ class YoutubePlaylistToMp3Downlaoder:
 
         # Download list
         self.download_mp3_from_url_list()
+
+    def get_mp3_files_in_music_folder(self):
+        file_list = []
+        for (dirpath, dirnames, filenames) in os.walk(self.music_folder):
+            file_list.extend(filenames)
+            break
+
+        # Filter filename that ends with <.mp3>
+        file_list = [file for file in file_list if file.endswith(".mp3")]
+
+        return file_list
