@@ -3,11 +3,10 @@ import json
 import win32api
 import glob
 import sys
+import shutil
 
 class mp3FileTransfer:
     def __init__(self, music_folder, **kwargs):
-
-        
         self.idFileName   = "mp3ID.jito"
         self.musicFolder  = music_folder
         self.mp3Files_musicFolder = []
@@ -67,9 +66,9 @@ class mp3FileTransfer:
         for fileStr in self.mp3Files_targetFolder:
             fileStr_noPath = fileStr.split('\\')[-1]       
             if not fileStr_noPath in self.mp3Files_musicFolderNoID:
-                cmdStr = "del " + '"' + self.targetFolder + '\\' + fileStr + '"'
-                print(cmdStr)
-                os.popen(cmdStr)
+                filePath = self.targetFolder + '\\' + fileStr
+                print("Deleting " + filePath)
+                os.remove(filePath)
         self.mp3Files_targetFolder = self.getListofMp3files(self.targetFolder)
     
     def transferMp3Files_and_rename(self):
@@ -79,9 +78,10 @@ class mp3FileTransfer:
         for fileStr in self.mp3Files_musicFolderNoID:
             print( '#' + str(i+1) + '/' + str(Nfiles) )
             if not fileStr in self.mp3Files_targetFolder:
-                cmdStr = 'copy /y ' + '"' + self.musicFolder + '\\' + self.mp3Files_musicFolder[i] + '"' + ' ' + '"'+ self.targetFolder + '\\' + fileStr + '"'
-                print(cmdStr)
-                os.popen(cmdStr)
+                src_file = self.musicFolder + '\\' + self.mp3Files_musicFolder[i]
+                trg_file = self.targetFolder + '\\' + fileStr 
+                print("Copying \"" + src_file + "\" to \"" + trg_file + "\"")
+                shutil.copyfile(src_file, trg_file)
             else:
                 print( fileStr + ' already exist --- skipping')
             i = i + 1
