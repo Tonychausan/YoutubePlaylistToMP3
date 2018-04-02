@@ -49,6 +49,7 @@ class YoutubePlaylistToMp3Downlaoder:
         ydl_opts = {
             'outtmpl': 'music/%(id)s#%(title)s.%(ext)s',
             'format': 'bestaudio/best',
+            'ignoreerrors': True,
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
