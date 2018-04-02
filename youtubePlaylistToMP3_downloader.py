@@ -1,6 +1,7 @@
 import os
 import json
 import youtube_dl
+from time import gmtime, strftime
 
 
 class YoutubePlaylistToMp3Downlaoder:
@@ -50,6 +51,8 @@ class YoutubePlaylistToMp3Downlaoder:
             'outtmpl': 'music/%(id)s#%(title)s.%(ext)s',
             'format': 'bestaudio/best',
             'ignoreerrors': True,
+            'logger': MyLogger(self.music_folder),
+            'progress_hooks': [MyHook],
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
@@ -120,3 +123,38 @@ class YoutubePlaylistToMp3Downlaoder:
         file_list = [file for file in file_list if file.endswith(".mp3")]
 
         return file_list
+
+
+class MyLogger(object):
+    def __init__(self, folder_name):
+        self.log_folder = '{}/{}'.format(folder_name, 'logs')
+        self.log_filename = '{}/{}.{}'.format(self.log_folder, strftime("%Y-%m-%d %H-%M-%S", gmtime()), 'log')
+        if not os.path.exists(self.log_folder):
+            os.makedirs(self.log_folder)
+
+        # Create Log file
+        if not os.path.exists(self.log_filename):
+            with open(self.log_filename, 'w'):
+                pass
+
+    def debug(self, msg):
+        pass
+
+    def warning(self, msg):
+        pass
+
+    def error(self, msg):
+        with open(self.log_filename, 'w') as log_file:
+            log_file.write(msg)
+
+        print(msg)
+
+
+def MyHook(d):
+    file_tuple = os.path.split(os.path.abspath(d['filename']))
+    (video_id, video_title) = file_tuple[1].split('#', 1)
+
+    if d['status'] == 'finished':
+        print("\nDone downloading {}".format(video_title))
+    if d['status'] == 'downloading':
+        print('{}: {} {}'.format(file_tuple[1], d['_percent_str'], d['_eta_str']), end='\r')
